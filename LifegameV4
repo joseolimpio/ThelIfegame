@@ -1,0 +1,260 @@
+/*
+* Jogo da vida
+* By - José Olimpio M. Negrão
+* Gmail - joseolimpionegrao@gmail.com
+* Trabalho - "Game of life"
+* Orientado por : Profº Apolinário.
+* UFBA - 12/2012
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+
+char arq[30];
+int linhas,colunas,cont_chars,celula;
+int linha,coluna,geracao;
+int vizinhos[100][100];
+int tabela[100][100];
+
+
+
+void imprimir_tabela()
+{
+    int i,j;
+        for (i=0;i<linhas;i++)
+            {
+                for (j=0;j<colunas;j++)
+                    {
+                        printf("%i",tabela[i][j]);
+                    }
+            printf("\n");
+            }
+}
+
+
+
+
+
+int conta_caracteres (char arq[30])
+{
+    FILE *fp;
+    char c;
+        if((fp = fopen(arq,"r")) == NULL)// Arquivo ASCII, para leitura
+            {
+                printf( "Erro na abertura do arquivo");
+                exit(0);
+            }
+        while (EOF != (c = getc(fp))) // Enquanto não chegar ao final do arquivo
+            if (c != '\n')
+                {
+                    cont_chars++;
+                }
+                else{fclose(fp);}
+        fclose(fp);
+        printf("%d \n",cont_chars);
+        return(0);
+}
+
+void dimensoes(char arq[30])
+{
+    FILE *fp;
+    int c;
+    int i,j,x,y,h;
+    char *buf_dimen = calloc(10, sizeof(char));
+        if((fp = fopen(arq,"r")) == NULL)
+            {
+                printf( "Erro na abertura do arquivo");
+                exit(0);
+            }
+        //usa o buff pra carregar a linha
+        for (i=0;i <cont_chars;i++)
+            {
+                c = getc(fp);
+                    if((c != ' ')&&(c >=48)&&(c<=57))
+                        {
+                            if((c != EOF)&&(c != '\n'))
+                                {
+                                    buf_dimen[i] = c;
+                                }
+                        }else
+                                {
+                                    break;
+                                }
+            printf("[%i] = %i\n",i,buf_dimen[i]);
+            }
+        linha = atoi(buf_dimen);
+        //usa o buff pra carregar a coluna
+        for (i=0;i <cont_chars;i++)
+            {
+                c = getc(fp);
+                    if((c != ' ')&&(c >=48)&&(c<=57))
+                        {
+                            if((c != EOF)&&(c != '\n'))
+                                {
+                                    buf_dimen[i] = c;
+                                }
+                        }else
+                                {
+                                    break;
+                                }
+            printf("[%i] = %i\n",i,buf_dimen[i]); // debug
+            }
+        coluna = atoi(buf_dimen);
+        fclose(fp);
+        linhas =linha;
+        colunas = coluna;
+        printf("\n");
+}
+
+void salva_linha(char arq [30])
+{
+    FILE *fp;
+    int c;
+    int i,j,x,y,h;
+    tabela[linhas][colunas];
+        if((fp = fopen(arq,"r")) == NULL)// Arquivo ASCII, para leitura
+            {
+                printf( "Erro na abertura do arquivo");
+                exit(0);
+            }
+        for (h=0;h <=cont_chars;h++)
+            {
+            c = getc(fp);
+            }
+        for (i=0;i<=linhas;i++)
+            {
+                for (j=0;j <=colunas;j++)
+                    {
+                        c = getc(fp);
+                        if((c  != EOF)&&(c != '\n')&&(c!= ' '))
+                            {
+                                tabela[i][j] = (c - 48);
+                                //printf("[%i][%i]: %i",i,j,tabela[i][j]);
+                            }
+                    }
+                printf("\n");
+            }
+        fclose(fp);
+        printf("\n");
+        printf("\n");
+        for (i=0;i<linhas;i++)
+            {
+                for (j=0;j<colunas;j++)
+                    {
+                        printf("%i",tabela[i][j]);
+                    }
+                printf("\n");
+            }
+        printf("\n");
+}
+
+
+
+void Observador()
+{
+    int i,j,k,h,c,m,b;
+    h=1;
+        for (i=0;i<linhas;i++)
+            {
+                for (j=0;j<colunas;j++)
+                    {
+                        c = tabela[i-1][j-1]+tabela[i-1][j]+tabela[i-1][j+1];
+                        m = tabela[i][j-1]+tabela[i][j+1];
+                        b = tabela[i+1][j-1]+tabela[i+1][j]+tabela[i+1][j+1];
+                        vizinhos[i][j] = c+m+b;
+                    }
+        printf("\n");
+            }
+}
+
+
+void Atualiza_cell()
+{
+/*
+    Regras
+    i) Qualquer célula viva com menos de dois vizinhos vivos morre de solidão (torna-se vazia).
+    ii) Qualquer célula viva com mais de três vizinhos vivos morre por superpopulação.
+    iii) Qualquer célula vazia com exatamente três vizinhos vivos se torna uma célula viva.
+    iv)Qualquer célula viva com dois ou três vizinhos vivos continua no mesmo estado para a próxima geração
+*/
+    int i,j,k,h;
+        printf("\n");
+            for (i=0;i<linhas;i++)
+                {
+                    for (j=0;j<colunas;j++)
+                        {
+                            if(vizinhos[i][j]!= 2)
+                                {
+                                    if((vizinhos[i][j]<2)|| vizinhos[i][j]>3)
+                                        {
+                                            tabela[i][j] = 0;
+                                        }
+                                        else
+                                            {
+                                                if(vizinhos[i][j]== 3)
+                                                    {
+                                                        tabela[i][j] = 1;
+                                                    }
+                                            }
+                                }
+                        }
+                }
+
+    //escreve a atualização
+    imprimir_tabela();
+
+}
+
+
+
+
+
+
+
+int main()
+{
+int g;
+int check_gera;
+geracao = 0;
+srand ((unsigned) time(NULL));
+printf("insira o nome do arquivo (apenas pressione enter para utilizar o default) :\n");
+gets(arq);
+if (strcmp (arq,"\0") == 0) /*comparando a entrada*/
+      strcpy( arq, "default.txt");
+printf("Insira o numero de geracoes - (insira 0 para default):\n");
+scanf("%i", &geracao);
+if (geracao == 0)
+{
+ geracao = 4;
+}
+
+printf("\n\n");
+printf("\n\n");
+system("cls");
+conta_caracteres(arq);
+dimensoes(arq);
+salva_linha(arq);
+printf("\n\n");
+system("cls");
+printf("Original\n");
+printf("\n\n");
+printf("|---------------------------------------------------|\n");
+imprimir_tabela();
+printf("|---------------------------------------------------|\n");
+printf("\n\n");
+    for (g=0;g<geracao;g++)
+        {
+            system("cls");
+            Observador();
+            printf("|-----------------------------------------geracao[%i]\n",g);
+            Atualiza_cell();
+            printf("|---------------------------------------------------|\n");
+            printf("\n\n");
+        }
+printf("geracoes[%i]",g);
+printf("\n\n");
+system("pause");
+
+}
