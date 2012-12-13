@@ -20,7 +20,7 @@ int ** tabela = NULL;
 
 
 
-void ** set_tabela(int linha, int coluna)
+void  set_tabela(int linha, int coluna) //não e necessario devido a retorno
  {
 
      int i,j;
@@ -38,10 +38,10 @@ void ** set_tabela(int linha, int coluna)
             printf("- Espaco Insuficiente -");
     }
 
-     return (0);
+    
 }
 
-void ** set_vizinhos(int linha, int coluna)
+void  set_vizinhos(int linha, int coluna)
  {
 
      int i,j;
