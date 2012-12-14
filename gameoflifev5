@@ -65,9 +65,9 @@ void set_vizinhos(int linha, int coluna)
 void imprimir_tabela()
 {
     int i,j;
-        for (i=0;i<linhas;i++)
+        for (i=1;i<=linha;i++)
             {
-                for (j=0;j<colunas;j++)
+                for (j=1;j<=coluna;j++)
                     {
                         printf("%i",tabela[i][j]);
                     }
@@ -180,9 +180,9 @@ void salva_linha(char arq [30])
             {
             c = getc(fp);
             }
-        for (i=0;i<=linha;i++)
+        for (i=1;i<linhas;i++)
             {
-                for (j=0;j <=coluna;j++)
+                for (j=1;j<colunas;j++)
                     {
                         c = getc(fp);
                         if((c  != EOF)&&(c != '\n')&&(c!= ' '))
@@ -197,9 +197,9 @@ void salva_linha(char arq [30])
         printf("linha[%i], coluna[%i]",linhas,colunas);
         printf("\n");
         printf("\n");
-        for (i=0;i<linha;i++)
+        for (i=0;i<linhas;i++)
             {
-                for (j=0;j<coluna;j++)
+                for (j=0;j<colunas;j++)
                     {
                         printf("%i",tabela[i][j]);
                     }
@@ -220,37 +220,14 @@ void Observador()
                 for (j=0;j<=colunas;j++)
                     {
 
-                        if(i = 0)//extremidade
-                        {
-                            if(j==0)
-                            {
-                              vizinhos[i][j]=tabela[i][j+1]+ tabela[i-1][j]+tabela[i-1][j+1];
-                            }
-                            if(j == (linhas-1))
-                            {
-
-                            }
-                        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                        c = tabela[i-1][j-1]+tabela[i-1][j]+tabela[i-1][j+1];
+                        m = tabela[i][j-1]+tabela[i][j+1];
+                        b = tabela[i+1][j-1]+tabela[i+1][j]+tabela[i+1][j+1];
                         vizinhos[i][j] = c+m+b;
                         // vizinhos [i][j] = count+c+m+b;
                         //vizinhos[i][j] = 1;
-                        printf("C[%i]- m[%i] -B[%i] \n",c,b,m);
                         //printf("C[%i][%i]=[%i] \n",i,j,vizinhos[i][j]);
-                         //printf("Celula[%i][%i] Vizinhos[%i] \n",i,j,vizinhos[i][j]);
+                         printf("Celula[%i][%i] Vizinhos[%i] \n",i,j,vizinhos[i][j]);
                         //printf("Celula[%i][%i]",i,j);
                     }
         printf("\n");
@@ -335,7 +312,7 @@ printf("\n\n");
     for (g=0;g<geracao;g++)
         {
             //system("cls");
-           // Observador();
+            //Observador();
             printf("|-----------------------------------------geracao[%i]\n",g);
            // Atualiza_cell();
             printf("|---------------------------------------------------|\n");
