@@ -1,6 +1,6 @@
 all: jogodavida
 
-lifegame: main.o 
+jogodavida: main.o 
   gcc	main.o -o jogodavida
 
 main.o: main.c
