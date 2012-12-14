@@ -271,16 +271,16 @@ int main(int argc, char *argv[])
     int check_gera;
     geracao = 0;
     srand ((unsigned) time(NULL));
-    printf("insira o nome do arquivo (apenas pressione enter para utilizar o default) :\n");
-    gets(arq);
-    if (strcmp (arq,"\0") == 0) /*comparando a entrada*/
+
+    if(argc > 1)
+        strcpy( arq, argv[1]);
+    else
         strcpy( arq, "default.txt");
-    printf("Insira o numero de geracoes - (insira 0 para default):\n");
-    scanf("%i", &geracao);
-    if (geracao == 0)
-    {
+
+    if(argc > 2)
+        geracao = atoi(argv[2]);
+    else
         geracao = 4;
-    }
 
     printf("\n\n");
     printf("\n\n");
