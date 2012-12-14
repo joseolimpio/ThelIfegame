@@ -21,17 +21,19 @@ int ** tabela = NULL;
 
 
 void set_tabela(int linha, int coluna)
- {
+{
 
-     int i,j;
+    int i,j;
 
-     tabela =(int**)malloc(linha*sizeof(int*));
+    tabela =(int**)malloc(linha*sizeof(int*));
 
-    if(tabela == NULL){
+    if(tabela == NULL)
+    {
         printf ("- Espaco Insuficiente -");
     }
 
-    for(i=0; i< linha; i++){
+    for(i=0; i< linha; i++)
+    {
         tabela[i] = (int*)malloc(coluna*sizeof(int));
         if(tabela[i] == NULL)
             printf("- Espaco Insuficiente -");
@@ -41,18 +43,20 @@ void set_tabela(int linha, int coluna)
 }
 
 void set_vizinhos(int linha, int coluna)
- {
+{
 
-     int i,j;
+    int i,j;
 
-     vizinhos =(int**)malloc(linha* sizeof(int*));
+    vizinhos =(int**)malloc(linha* sizeof(int*));
 
-    if(vizinhos == NULL){
+    if(vizinhos == NULL)
+    {
         printf ("- Espaco Insuficiente -");
 
     }
 
-    for(i=0; i< linha; i++){
+    for(i=0; i< linha; i++)
+    {
         vizinhos[i] = (int*)malloc(coluna* sizeof(int));
         if(vizinhos[i] == NULL)
             printf("- Espaco Insuficiente -");
@@ -65,14 +69,14 @@ void set_vizinhos(int linha, int coluna)
 void imprimir_tabela()
 {
     int i,j;
-        for (i=1;i<=linha;i++)
-            {
-                for (j=1;j<=coluna;j++)
-                    {
-                        printf("%i",tabela[i][j]);
-                    }
-            printf("\n");
-            }
+    for (i=1; i<=linha; i++)
+    {
+        for (j=1; j<=coluna; j++)
+        {
+            printf("%i",tabela[i][j]);
+        }
+        printf("\n");
+    }
 }
 
 
@@ -81,20 +85,23 @@ int conta_caracteres (char arq[30])
 {
     FILE *fp;
     char c;
-        if((fp = fopen(arq,"r")) == NULL)// Arquivo ASCII, para leitura
-            {
-                printf( "Erro na abertura do arquivo");
-                exit(0);
-            }
-        while (EOF != (c = getc(fp))) // Enquanto não chegar ao final do arquivo
-            if (c != '\n')
-                {
-                    cont_chars++;
-                }
-                else{fclose(fp);}
-        fclose(fp);
-        printf("%d \n",cont_chars);
-        return(0);
+    if((fp = fopen(arq,"r")) == NULL)// Arquivo ASCII, para leitura
+    {
+        printf( "Erro na abertura do arquivo");
+        exit(0);
+    }
+    while (EOF != (c = getc(fp))) // Enquanto não chegar ao final do arquivo
+        if (c != '\n')
+        {
+            cont_chars++;
+        }
+        else
+        {
+            fclose(fp);
+        }
+    fclose(fp);
+    printf("%d \n",cont_chars);
+    return(0);
 }
 
 void dimensoes(char arq[30])
@@ -103,64 +110,66 @@ void dimensoes(char arq[30])
     int c;
     int i,j,x,y,h;
     char *buf_dimen = calloc(10, sizeof(char));
-        if((fp = fopen(arq,"r")) == NULL)
+    if((fp = fopen(arq,"r")) == NULL)
+    {
+        printf( "Erro na abertura do arquivo");
+        exit(0);
+    }
+    //usa o buff pra carregar a linha
+    for (i=0; i <cont_chars; i++)
+    {
+        c = getc(fp);
+        if((c != ' ')&&(c >=48)&&(c<=57))
+        {
+            if((c != EOF)&&(c != '\n'))
             {
-                printf( "Erro na abertura do arquivo");
-                exit(0);
+                buf_dimen[i] = c;
             }
-        //usa o buff pra carregar a linha
-        for (i=0;i <cont_chars;i++)
+        }
+        else
+        {
+            break;
+        }
+        printf("[%i] = %i\n",i,buf_dimen[i]);
+    }
+    linha = atoi(buf_dimen);
+    //usa o buff pra carregar a coluna
+    for (i=0; i <cont_chars; i++)
+    {
+        c = getc(fp);
+        if((c != ' ')&&(c >=48)&&(c<=57))
+        {
+            if((c != EOF)&&(c != '\n'))
             {
-                c = getc(fp);
-                    if((c != ' ')&&(c >=48)&&(c<=57))
-                        {
-                            if((c != EOF)&&(c != '\n'))
-                                {
-                                    buf_dimen[i] = c;
-                                }
-                        }else
-                                {
-                                    break;
-                                }
-            printf("[%i] = %i\n",i,buf_dimen[i]);
+                buf_dimen[i] = c;
             }
-        linha = atoi(buf_dimen);
-        //usa o buff pra carregar a coluna
-        for (i=0;i <cont_chars;i++)
-            {
-                c = getc(fp);
-                    if((c != ' ')&&(c >=48)&&(c<=57))
-                        {
-                            if((c != EOF)&&(c != '\n'))
-                                {
-                                    buf_dimen[i] = c;
-                                }
-                        }else
-                                {
-                                    break;
-                                }
-            printf("[%i] = %i\n",i,buf_dimen[i]); // debug
-            }
-        coluna = atoi(buf_dimen);
-        fclose(fp);
-        linhas =linha+2;
-        colunas = coluna+2;
-        printf("\n");
-        set_tabela(linhas,colunas);
-        set_vizinhos(linhas,colunas);
+        }
+        else
+        {
+            break;
+        }
+        printf("[%i] = %i\n",i,buf_dimen[i]); // debug
+    }
+    coluna = atoi(buf_dimen);
+    fclose(fp);
+    linhas =linha+2;
+    colunas = coluna+2;
+    printf("\n");
+    set_tabela(linhas,colunas);
+    set_vizinhos(linhas,colunas);
 
 }
 
 void zera_linhas()
 {
-        int i,j;
-            for (i=0;i<linhas;i++)
-            {
-                for (j=0;j <colunas;j++)
-                    {
-                                tabela[i][j] = 0;
-                    }
-                  }
+    int i,j;
+    for (i=0; i<linhas; i++)
+    {
+        for (j=0; j <colunas; j++)
+        {
+            tabela[i][j] = 0;
+        }
+    }
 }
 
 
@@ -171,41 +180,41 @@ void salva_linha(char arq [30])
     int i,j,x,y,h;
     //tabela[linhas][colunas];
     zera_linhas();
-        if((fp = fopen(arq,"r")) == NULL)// Arquivo ASCII, para leitura
-            {
-                printf( "Erro na abertura do arquivo");
-                exit(0);
-            }
-        for (h=0;h <=cont_chars;h++)
-            {
+    if((fp = fopen(arq,"r")) == NULL)// Arquivo ASCII, para leitura
+    {
+        printf( "Erro na abertura do arquivo");
+        exit(0);
+    }
+    for (h=0; h <=cont_chars; h++)
+    {
+        c = getc(fp);
+    }
+    for (i=1; i<linhas; i++)
+    {
+        for (j=1; j<colunas; j++)
+        {
             c = getc(fp);
-            }
-        for (i=1;i<linhas;i++)
+            if((c  != EOF)&&(c != '\n')&&(c!= ' '))
             {
-                for (j=1;j<colunas;j++)
-                    {
-                        c = getc(fp);
-                        if((c  != EOF)&&(c != '\n')&&(c!= ' '))
-                            {
-                                tabela[i][j] = (c - 48);
-                                //printf("[%i][%i]: %i",i,j,tabela[i][j]);
-                            }
-                    }
-                printf("\n");
+                tabela[i][j] = (c - 48);
+                //printf("[%i][%i]: %i",i,j,tabela[i][j]);
             }
-        fclose(fp);
-        printf("linha[%i], coluna[%i]",linhas,colunas);
+        }
         printf("\n");
+    }
+    fclose(fp);
+    printf("linha[%i], coluna[%i]",linhas,colunas);
+    printf("\n");
+    printf("\n");
+    for (i=0; i<linhas; i++)
+    {
+        for (j=0; j<colunas; j++)
+        {
+            printf("%i",tabela[i][j]);
+        }
         printf("\n");
-        for (i=0;i<linhas;i++)
-            {
-                for (j=0;j<colunas;j++)
-                    {
-                        printf("%i",tabela[i][j]);
-                    }
-                printf("\n");
-            }
-        printf("\n");
+    }
+    printf("\n");
 }
 
 
@@ -215,92 +224,88 @@ void Observador()
 
     int i,j,c,m,b;
 
-        for (i=1;i<=linha;i++)
-            {
-                for (j=1;j<=coluna;j++)
-                    {
-
-                        c = tabela[i-1][j-1]+tabela[i-1][j]+tabela[i-1][j+1];
-                        m = tabela[i][j-1]+tabela[i][j+1];
-                        b = tabela[i+1][j-1]+tabela[i+1][j]+tabela[i+1][j+1];
-                        vizinhos[i][j] = c+m+b;
-                        //testando e matando
-                              if(vizinhos[i][j] != 2)
-                              {
-                                   if((vizinhos[i][j]<2)|| vizinhos[i][j]>3)
-                                        {
-                                            tabela[i][j] = 0;
-                                        }
-                                        else
-                                            {
-                                                if(vizinhos[i][j]== 3)
-                                                    {
-                                                        tabela[i][j] = 1;
-                                                    }
-                                            }
-                              }
-
-
-                        // vizinhos [i][j] = count+c+m+b;
-                        //vizinhos[i][j] = 1;
-                        //printf("C[%i][%i]=[%i] \n",i,j,vizinhos[i][j]);
-                        // printf("Celula[%i][%i] Vizinhos[%i] \n",i,j,vizinhos[i][j]);
-                        //printf("Celula[%i][%i]",i,j);
-                    }
-        //printf("\n");
-            }
- imprimir_tabela();
-}
-
-
-
-
-
-
-
-
-
-int main()
-{
-int g;
-int check_gera;
-geracao = 0;
-srand ((unsigned) time(NULL));
-printf("insira o nome do arquivo (apenas pressione enter para utilizar o default) :\n");
-gets(arq);
-if (strcmp (arq,"\0") == 0) /*comparando a entrada*/
-      strcpy( arq, "default.txt");
-printf("Insira o numero de geracoes - (insira 0 para default):\n");
-scanf("%i", &geracao);
-if (geracao == 0)
-{
- geracao = 4;
-}
-
-printf("\n\n");
-printf("\n\n");
-system("cls");
-conta_caracteres(arq);
-dimensoes(arq);
-salva_linha(arq);
-printf("\n\n");
-system("cls");
-printf("Original\n");
-printf("\n\n");
-printf("|---------------------------------------------------|\n");
-imprimir_tabela();
-printf("|---------------------------------------------------|\n");
-printf("\n\n");
-    for (g=0;g<geracao;g++)
+    for (i=1; i<=linha; i++)
+    {
+        for (j=1; j<=coluna; j++)
         {
-            system("cls");
-            printf("|-----------------------------------------geracao[%i]\n",g);
-            Observador();
-            printf("|---------------------------------------------------|\n");
-            printf("\n\n");
+
+            c = tabela[i-1][j-1]+tabela[i-1][j]+tabela[i-1][j+1];
+            m = tabela[i][j-1]+tabela[i][j+1];
+            b = tabela[i+1][j-1]+tabela[i+1][j]+tabela[i+1][j+1];
+            vizinhos[i][j] = c+m+b;
+            //testando e matando
+            if(vizinhos[i][j] != 2)
+            {
+                if((vizinhos[i][j]<2)|| vizinhos[i][j]>3)
+                {
+                    tabela[i][j] = 0;
+                }
+                else
+                {
+                    if(vizinhos[i][j]== 3)
+                    {
+                        tabela[i][j] = 1;
+                    }
+                }
+            }
+
+
+            // vizinhos [i][j] = count+c+m+b;
+            //vizinhos[i][j] = 1;
+            //printf("C[%i][%i]=[%i] \n",i,j,vizinhos[i][j]);
+            //printf("Celula[%i][%i] Vizinhos[%i] \n",i,j,vizinhos[i][j]);
+            //printf("Celula[%i][%i]",i,j);
         }
-printf("geracoes[%i]",g);
-printf("\n\n");
-system("pause");
+        printf("\n");
+    }
+    imprimir_tabela();
+}
+
+
+
+
+int main(int argc, char *argv[])
+{
+
+    int g;
+    int check_gera;
+    geracao = 0;
+    srand ((unsigned) time(NULL));
+    printf("insira o nome do arquivo (apenas pressione enter para utilizar o default) :\n");
+    gets(arq);
+    if (strcmp (arq,"\0") == 0) /*comparando a entrada*/
+        strcpy( arq, "default.txt");
+    printf("Insira o numero de geracoes - (insira 0 para default):\n");
+    scanf("%i", &geracao);
+    if (geracao == 0)
+    {
+        geracao = 4;
+    }
+
+    printf("\n\n");
+    printf("\n\n");
+    system("cls");
+    conta_caracteres(arq);
+    dimensoes(arq);
+    salva_linha(arq);
+    printf("\n\n");
+    system("cls");
+    printf("Original\n");
+    printf("\n\n");
+    printf("|---------------------------------------------------|\n");
+    imprimir_tabela();
+    printf("|---------------------------------------------------|\n");
+    printf("\n\n");
+    for (g=0; g<geracao; g++)
+    {
+        //system("cls");
+        printf("|-----------------------------------------geracao[%i]\n",g);
+        Observador();
+        printf("|---------------------------------------------------|\n");
+        printf("\n\n");
+    }
+    printf("geracoes[%i]",g);
+    printf("\n\n");
+    system("pause");
 
 }
