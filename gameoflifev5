@@ -215,9 +215,9 @@ void Observador()
 
     int i,j,k,h,c,m,b,count;
 
-        for (i=0;i<=linhas;i++)
+        for (i=1;i<=linha;i++)
             {
-                for (j=0;j<=colunas;j++)
+                for (j=1;j<=coluna;j++)
                     {
 
                         c = tabela[i-1][j-1]+tabela[i-1][j]+tabela[i-1][j+1];
@@ -312,9 +312,9 @@ printf("\n\n");
     for (g=0;g<geracao;g++)
         {
             //system("cls");
-            //Observador();
+            Observador();
             printf("|-----------------------------------------geracao[%i]\n",g);
-           // Atualiza_cell();
+            Atualiza_cell();
             printf("|---------------------------------------------------|\n");
             printf("\n\n");
         }
