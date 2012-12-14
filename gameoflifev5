@@ -20,7 +20,7 @@ int ** tabela = NULL;
 
 
 
-void  set_tabela(int linha, int coluna) //não e necessario devido a retorno
+void set_tabela(int linha, int coluna)
  {
 
      int i,j;
@@ -29,7 +29,6 @@ void  set_tabela(int linha, int coluna) //não e necessario devido a retorno
 
     if(tabela == NULL){
         printf ("- Espaco Insuficiente -");
-        return (NULL);
     }
 
     for(i=0; i< linha; i++){
@@ -38,10 +37,10 @@ void  set_tabela(int linha, int coluna) //não e necessario devido a retorno
             printf("- Espaco Insuficiente -");
     }
 
-    
+
 }
 
-void  set_vizinhos(int linha, int coluna)
+void set_vizinhos(int linha, int coluna)
  {
 
      int i,j;
@@ -50,7 +49,7 @@ void  set_vizinhos(int linha, int coluna)
 
     if(vizinhos == NULL){
         printf ("- Espaco Insuficiente -");
-        return (NULL);
+
     }
 
     for(i=0; i< linha; i++){
@@ -144,20 +143,34 @@ void dimensoes(char arq[30])
             }
         coluna = atoi(buf_dimen);
         fclose(fp);
-        linhas =linha;
-        colunas = coluna;
+        linhas =linha+2;
+        colunas = coluna+2;
         printf("\n");
         set_tabela(linhas,colunas);
         set_vizinhos(linhas,colunas);
 
 }
 
+void zera_linhas()
+{
+        int i,j;
+            for (i=0;i<linhas;i++)
+            {
+                for (j=0;j <colunas;j++)
+                    {
+                                tabela[i][j] = 0;
+                    }
+                  }
+}
+
+
 void salva_linha(char arq [30])
 {
     FILE *fp;
     int c;
     int i,j,x,y,h;
-    tabela[linhas][colunas];
+    //tabela[linhas][colunas];
+    zera_linhas();
         if((fp = fopen(arq,"r")) == NULL)// Arquivo ASCII, para leitura
             {
                 printf( "Erro na abertura do arquivo");
@@ -167,9 +180,9 @@ void salva_linha(char arq [30])
             {
             c = getc(fp);
             }
-        for (i=0;i<=linhas;i++)
+        for (i=0;i<=linha;i++)
             {
-                for (j=0;j <=colunas;j++)
+                for (j=0;j <=coluna;j++)
                     {
                         c = getc(fp);
                         if((c  != EOF)&&(c != '\n')&&(c!= ' '))
@@ -181,11 +194,12 @@ void salva_linha(char arq [30])
                 printf("\n");
             }
         fclose(fp);
+        printf("linha[%i], coluna[%i]",linhas,colunas);
         printf("\n");
         printf("\n");
-        for (i=0;i<linhas;i++)
+        for (i=0;i<linha;i++)
             {
-                for (j=0;j<colunas;j++)
+                for (j=0;j<coluna;j++)
                     {
                         printf("%i",tabela[i][j]);
                     }
@@ -199,67 +213,46 @@ void salva_linha(char arq [30])
 void Observador()
 {
 
-    int i,j,k,h,cont_vizinho;
-    cont_vizinho = 0;
-    h=1;
-        for (i=0 ;i<linhas;i++)
+    int i,j,k,h,c,m,b,count;
+
+        for (i=0;i<=linhas;i++)
             {
-                for (j=0;j<colunas;j++)
+                for (j=0;j<=colunas;j++)
                     {
-                            if( ((i - 1)&&(j - 1))> 0 )
+
+                        if(i = 0)//extremidade
+                        {
+                            if(j==0)
+                            {
+                              vizinhos[i][j]=tabela[i][j+1]+ tabela[i-1][j]+tabela[i-1][j+1];
+                            }
+                            if(j == (linhas-1))
                             {
 
-                                if(((i+1)<linhas)&& ((j+1)< colunas))
-                                 {
-
-                                     if(tabela[i-1][j-1] == 1)
-                                        {
-                                            cont_vizinho++;
-                                        }
-                                    if(tabela[i-1][j] == 1)
-                                        {
-                                            cont_vizinho++;
-                                        }
-                                    if(tabela[i-1][j+1] == 1)
-                                        {
-                                             cont_vizinho++;
-                                        }
-                                    if(tabela[i][j-1] == 1)
-                                        {
-                                             cont_vizinho++;
-                                        }
-                                    if(tabela[i][j+1] == 1)
-                                        {
-                                             cont_vizinho++;
-                                        }
-                                    if(tabela[i+1][j-1] == 1)
-                                        {
-                                            cont_vizinho++;
-                                        }
-                                    if(tabela[i+1][j] == 1)
-                                        {
-                                             cont_vizinho++;
-                                        }
-                                    if(tabela[i+1][j+1] == 1)
-                                        {
-                                             cont_vizinho++;
-                                        }
-
-
-                                 }
-
-
                             }
-
-                                     //vizinhos [i][j] = 1;
-                                    //vizinhos[i][j] = 1;
-                                    //printf("C[%i][%i]=[%i] \n",i,j,c);
-                                    printf("Celula[%i][%i] Vizinhos[%i] \n",i,j,vizinhos[i][j]);
-                                    //printf("Celula[%i][%i]",i,j);
                         }
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+                        vizinhos[i][j] = c+m+b;
+                        // vizinhos [i][j] = count+c+m+b;
+                        //vizinhos[i][j] = 1;
+                        printf("C[%i]- m[%i] -B[%i] \n",c,b,m);
+                        //printf("C[%i][%i]=[%i] \n",i,j,vizinhos[i][j]);
+                         //printf("Celula[%i][%i] Vizinhos[%i] \n",i,j,vizinhos[i][j]);
+                        //printf("Celula[%i][%i]",i,j);
+                    }
         printf("\n");
             }
 }
@@ -332,7 +325,7 @@ conta_caracteres(arq);
 dimensoes(arq);
 salva_linha(arq);
 printf("\n\n");
-system("cls");
+//system("cls");
 printf("Original\n");
 printf("\n\n");
 printf("|---------------------------------------------------|\n");
@@ -342,9 +335,9 @@ printf("\n\n");
     for (g=0;g<geracao;g++)
         {
             //system("cls");
-            Observador();
+           // Observador();
             printf("|-----------------------------------------geracao[%i]\n",g);
-            Atualiza_cell();
+           // Atualiza_cell();
             printf("|---------------------------------------------------|\n");
             printf("\n\n");
         }
