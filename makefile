@@ -1,10 +1,10 @@
 all: jogodavida
 
-lifegame: main.o 
-  gcc	main.o -o jogodavida
+jogodavida: jogodavida.o 
+	gcc jogodavida.o -o jogodavida
 
-main.o: main.c
-	gcc -c main.c
+jogodavida.o: jogodavida.c
+	gcc -c jogodavida.c
 
 clean: 
 	rm -rf *o jogodavida
