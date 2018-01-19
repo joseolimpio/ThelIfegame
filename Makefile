@@ -7,4 +7,4 @@ main.o: main.c
 	gcc -c main.c
 
 clean: 
-	rm -rf *o jogodavida
+	rm -rf *.o jogodavida

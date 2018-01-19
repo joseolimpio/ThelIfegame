@@ -1,7 +1,7 @@
 /*
 * Jogo da vida
 * By - José Olimpio M. Negrão
-* Gmail - joseolimpionegrao@gmail.com
+* Gmail - joseolimpionegrao at gmail dot com
 * Trabalho - "Game of life"
 * Orientado por : Profº Apolinário.
 * UFBA - 12/2012
@@ -38,8 +38,6 @@ void set_tabela(int linha, int coluna)
         if(tabela[i] == NULL)
             printf("- Espaco Insuficiente -");
     }
-
-
 }
 
 void set_vizinhos(int linha, int coluna)
@@ -87,7 +85,7 @@ int conta_caracteres (char arq[30])
     char c;
     if((fp = fopen(arq,"r")) == NULL)// Arquivo ASCII, para leitura
     {
-        printf( "Erro na abertura do arquivo");
+        printf( "Erro na abertura do arquivo [%s]\n", arq);
         exit(0);
     }
     while (EOF != (c = getc(fp))) // Enquanto não chegar ao final do arquivo
@@ -262,6 +260,14 @@ void Observador()
 }
 
 
+void clear_screen()
+{
+#ifdef _WIN32
+    system("cls");
+#else
+    printf("\x1B[2J");
+#endif
+}
 
 
 int main(int argc, char *argv[])
@@ -284,12 +290,12 @@ int main(int argc, char *argv[])
 
     printf("\n\n");
     printf("\n\n");
-    system("cls");
+    clear_screen();
     conta_caracteres(arq);
     dimensoes(arq);
     salva_linha(arq);
     printf("\n\n");
-    system("cls");
+    clear_screen();
     printf("Original\n");
     printf("\n\n");
     printf("|---------------------------------------------------|\n");
@@ -306,6 +312,9 @@ int main(int argc, char *argv[])
     }
     printf("geracoes[%i]",g);
     printf("\n\n");
+#ifdef _WIN32
+    /* if you are on unix system, is better run this code on terminal. dont just click on file ! */
     system("pause");
+#endif
 
 }
