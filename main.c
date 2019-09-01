@@ -1,7 +1,7 @@
 /*
 * Jogo da vida
 * By - José Olimpio M. Negrão
-* Gmail - joseolimpionegrao@gmail.com
+* Gmail - joseolimpionegrao at gmail dot com
 * Trabalho - "Game of life"
 * Orientado por : Profº Apolinário.
 * UFBA - 12/2012
@@ -11,15 +11,23 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+/* method inspired on the method die from PHP */
+#define die(text, args...) do { fprintf(stderr, text, ##args); free_arrays(); exit(1); } while(0)
+#define debug(text, args...) do { if (is_debug) printf(text, ##args); } while(0)
 
 char arq[30];
+char is_debug = 0;
 int linhas,colunas,cont_chars,celula;
 int linha,coluna,geracao;
 int ** vizinhos= NULL;
 int ** tabela = NULL;
 
+void free_arrays();
+void set_tabela(int, int);
 
-
+/**
+ * Alloc memory for the matrix of data
+ */
 void set_tabela(int linha, int coluna)
 {
 
@@ -29,19 +37,21 @@ void set_tabela(int linha, int coluna)
 
     if(tabela == NULL)
     {
-        printf ("- Espaco Insuficiente -");
+        die("- Espaco Insuficiente -");
     }
 
     for(i=0; i< linha; i++)
     {
         tabela[i] = (int*)malloc(coluna*sizeof(int));
         if(tabela[i] == NULL)
-            printf("- Espaco Insuficiente -");
+            die("- Espaco Insuficiente -");
     }
-
-
 }
 
+/**
+ * TODO: This methods ( set_vizinhos and set_tabela ) should be the same method receiving the matrix to 
+ * be filled/allocated 
+ */
 void set_vizinhos(int linha, int coluna)
 {
 
@@ -51,21 +61,20 @@ void set_vizinhos(int linha, int coluna)
 
     if(vizinhos == NULL)
     {
-        printf ("- Espaco Insuficiente -");
-
+        die("- Espaco Insuficiente -");
     }
 
     for(i=0; i< linha; i++)
     {
         vizinhos[i] = (int*)malloc(coluna* sizeof(int));
         if(vizinhos[i] == NULL)
-            printf("- Espaco Insuficiente -");
+            die("- Espaco Insuficiente -");
     }
-
-
 }
 
-
+/**
+ * TODO: This method should receive a matrix as parameter to be able to print any matrix 
+ */
 void imprimir_tabela()
 {
     int i,j;
@@ -79,16 +88,13 @@ void imprimir_tabela()
     }
 }
 
-
-
 int conta_caracteres (char arq[30])
 {
     FILE *fp;
     char c;
     if((fp = fopen(arq,"r")) == NULL)// Arquivo ASCII, para leitura
     {
-        printf( "Erro na abertura do arquivo");
-        exit(0);
+        die( "Erro na abertura do arquivo [%s]\n", arq);
     }
     while (EOF != (c = getc(fp))) // Enquanto não chegar ao final do arquivo
         if (c != '\n')
@@ -112,8 +118,7 @@ void dimensoes(char arq[30])
     char *buf_dimen = calloc(10, sizeof(char));
     if((fp = fopen(arq,"r")) == NULL)
     {
-        printf( "Erro na abertura do arquivo");
-        exit(0);
+        die( "Erro na abertura do arquivo");
     }
     //usa o buff pra carregar a linha
     for (i=0; i <cont_chars; i++)
@@ -157,7 +162,6 @@ void dimensoes(char arq[30])
     printf("\n");
     set_tabela(linhas,colunas);
     set_vizinhos(linhas,colunas);
-
 }
 
 void zera_linhas()
@@ -180,10 +184,9 @@ void salva_linha(char arq [30])
     int i,j,x,y,h;
     //tabela[linhas][colunas];
     zera_linhas();
-    if((fp = fopen(arq,"r")) == NULL)// Arquivo ASCII, para leitura
+    if((fp = fopen(arq,"rw")) == NULL)// Arquivo ASCII, para leitura
     {
-        printf( "Erro na abertura do arquivo");
-        exit(0);
+        die( "Erro na abertura do arquivo [%s]\n", arq);
     }
     for (h=0; h <=cont_chars; h++)
     {
@@ -197,7 +200,7 @@ void salva_linha(char arq [30])
             if((c  != EOF)&&(c != '\n')&&(c!= ' '))
             {
                 tabela[i][j] = (c - 48);
-                //printf("[%i][%i]: %i",i,j,tabela[i][j]);
+                debug("[%i][%i]: %i",i,j,tabela[i][j]);
             }
         }
         printf("\n");
@@ -216,8 +219,6 @@ void salva_linha(char arq [30])
     }
     printf("\n");
 }
-
-
 
 void Observador()
 {
@@ -262,6 +263,15 @@ void Observador()
 }
 
 
+void clear_screen()
+{
+#ifdef _WIN32
+    system("cls");
+#else
+    /* printf("\x1B[2J"); */
+    printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+#endif
+}
 
 
 int main(int argc, char *argv[])
@@ -284,12 +294,12 @@ int main(int argc, char *argv[])
 
     printf("\n\n");
     printf("\n\n");
-    system("cls");
+    clear_screen();
     conta_caracteres(arq);
     dimensoes(arq);
     salva_linha(arq);
     printf("\n\n");
-    system("cls");
+    clear_screen();
     printf("Original\n");
     printf("\n\n");
     printf("|---------------------------------------------------|\n");
@@ -298,7 +308,6 @@ int main(int argc, char *argv[])
     printf("\n\n");
     for (g=0; g<geracao; g++)
     {
-        //system("cls");
         printf("|-----------------------------------------geracao[%i]\n",g);
         Observador();
         printf("|---------------------------------------------------|\n");
@@ -306,6 +315,22 @@ int main(int argc, char *argv[])
     }
     printf("geracoes[%i]",g);
     printf("\n\n");
+    free_arrays();
+#ifdef _WIN32
+    /* if you are on unix system, is better run this code on terminal. dont just click on file ! */
     system("pause");
+#endif
+
+}
+
+void free_arrays()
+{
+    if (tabela != NULL)
+        free(tabela);
+    if(vizinhos != NULL)
+        free(vizinhos);
+
+    tabela = NULL;
+    vizinhos = NULL;
 
 }
